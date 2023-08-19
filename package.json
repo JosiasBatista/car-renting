@@ -1,0 +1,26 @@
+{
+  "name": "aula05-tdd-project-pt01",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npx mocha -w --parallel **/**/*.test.js --ignore node_modules/**/*",
+    "test:cov": "npx nyc npx mocha --parallel **/**/*.test.js --ignore node_modules/**/*",
+    "dev": "node ./src/runApi.js",
+    "seed": "node ./seed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "faker": "^5.1.0",
+    "mocha": "^8.4.0",
+    "nyc": "^15.1.0",
+    "sinon": "^15.0.4",
+    "supertest": "^6.3.3"
+  }
+}

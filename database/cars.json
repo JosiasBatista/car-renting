@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ba1a4232-b0ff-4da2-ad77-2611ce0e06c1",
+    "name": "Focus",
+    "releaseYear": 2022,
+    "available": true,
+    "gasAvailable": true
+  },
+  {
+    "id": "f5987b04-3e26-4c01-8224-8a68b7fca45b",
+    "name": "F-150",
+    "releaseYear": 2023,
+    "available": true,
+    "gasAvailable": true
+  },
+  {
+    "id": "84519f3e-9c26-423a-b761-b5b05029ac52",
+    "name": "PT Cruiser",
+    "releaseYear": 2022,
+    "available": true,
+    "gasAvailable": true
+  }
+]
