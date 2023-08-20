@@ -2,7 +2,6 @@ const { describe, it, after, before } = require('mocha')
 const supertest = require('supertest')
 const assert = require('assert')
 const sinon = require('sinon')
-const Transaction = require('./entities/transaction')
 const CarService = require('./service/carService')
 const { expect } = require('chai')
 
@@ -17,10 +16,9 @@ describe('API Suite test', () => {
   let carService = {}
   
   before((done) => {
-    const { app: application, carService: instantiatedService } = require('./api')
-  
-    carService = instantiatedService
-    app = application
+    carService = require('./factory')
+    app = require('./api')
+
     app.once('listening', done)
   })
 
@@ -127,6 +125,109 @@ describe('API Suite test', () => {
         .expect(500)
 
       assert.strictEqual(response.text, 'Falha ao realizar aluguel!')
+    })
+  })
+
+  describe('/calculateFinalPrice:post', () => {
+    it('given a carCategory, customer and numberOfDays it should calculate final amount in real', async () => {
+      const customer = {
+        ...mocks.customer,
+        age: 50
+      }
+
+      const carCategory = {
+        ...mocks.category,
+        price: 37.6
+      }
+
+      const numberOfDays = 5
+
+      const body = {
+        customer,
+        carCategory,
+        numberOfDays
+      }
+
+      const expected = carService.currencyFormat.format(244.40)
+
+      const response = await supertest(app)
+        .post('/calculateFinalPrice')
+        .send(body)
+        .expect(200)
+
+      const { price } = JSON.parse(response.text)
+      assert.equal(price, expected)
+    })
+
+    it('given a carCategory, customer and do not passing a numberOfDays it should return 403 error', async () => {
+      const customer = {
+        ...mocks.customer,
+        age: 50
+      }
+
+      const carCategory = {
+        ...mocks.category,
+        price: 37.6
+      }
+
+      const body = {
+        customer,
+        carCategory
+      }
+
+      const response = await supertest(app)
+        .post('/calculateFinalPrice')
+        .send(body)
+        .expect(403)
+      
+      assert.strictEqual(response.text, 'Falha ao calcular preço!')
+    })
+
+    it('given an invalid carCategory it should return 403 error', async () => {
+      const customer = {
+        ...mocks.customer,
+        age: 50
+      }
+
+      const carCategory = Object.create(mocks.category)
+      carCategory.price = undefined
+
+      const body = {
+        customer,
+        carCategory,
+        numberOfDays: 5
+      }
+
+      const response = await supertest(app)
+        .post('/calculateFinalPrice')
+        .send(body)
+        .expect(403)
+      
+      assert.strictEqual(response.text, 'Falha ao calcular preço!')
+    })
+
+    it('given an invalid customer age it should return 500 error', async () => {
+      const customer = {
+        ...mocks.customer,
+        age: 12
+      }
+
+      const carCategory = {...mocks.category,
+        price: 37.6
+      }
+
+      const body = {
+        customer,
+        carCategory,
+        numberOfDays: 5
+      }
+
+      const response = await supertest(app)
+        .post('/calculateFinalPrice')
+        .send(body)
+        .expect(500)
+      
+      assert.strictEqual(response.text, 'Falha ao calcular preço!')
     })
   })
 

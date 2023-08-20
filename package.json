@@ -9,7 +9,7 @@
   "scripts": {
     "test": "npx mocha -w --parallel **/**/*.test.js --ignore node_modules/**/*",
     "test:cov": "npx nyc npx mocha --parallel **/**/*.test.js --ignore node_modules/**/*",
-    "dev": "node ./src/runApi.js",
+    "dev": "node ./src/api.js",
     "seed": "node ./seed"
   },
   "keywords": [],
